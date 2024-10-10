@@ -1,0 +1,25 @@
+{
+  "name": "express-websocket",
+  "version": "1.0.0",
+  "description": "Express API with Websocket using ws",
+  "engines": {
+    "node": ">=20.6.0"
+  },
+  "main": "server.ts",
+  "scripts": {
+    "dev": "node --watch --watch-preserve-output -r ts-node/register src/server.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Emiliano Sasal",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.7.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
+  }
+}
