@@ -8,17 +8,20 @@
   "main": "server.ts",
   "scripts": {
     "dev": "node --watch --watch-preserve-output -r ts-node/register src/server.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npx tsc",
+    "start": "node dist/server.js"
   },
   "keywords": [],
   "author": "Emiliano Sasal",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.21.1"
+    "express": "^4.21.1",
+    "ws": "^8.18.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
     "@types/node": "^22.7.5",
+    "@types/ws": "^8.5.12",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.3"
   }

@@ -1,12 +1,31 @@
-import express from 'express';
+import express from "express"
+import { createServer } from "http"
+import WebSocket from "ws"
+import router from "./routes"
 
-const app = express();
-const port = 3000;
+const PORT = process.env.PORT || 8080
 
-app.get('/', (req, res) => {
-    res.send('Hello, World!');
-});
+const app = express()
+app.use("/", router)
+const server = createServer(app)
 
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-});
+const wss = new WebSocket.Server({ server })
+
+wss.on("error", console.error)
+
+wss.on("connection", (ws) => {
+  console.log("New client connected")
+  ws.send("Welcome New Client!")
+
+  ws.on("message", (message) => {
+    console.log(`Received: ${message}`)
+
+    wss.clients.forEach((client) => {
+      if (client !== ws && client.readyState === WebSocket.OPEN) {
+        client.send(message)
+      }
+    })
+  })
+})
+
+server.listen(PORT, () => console.log(`Lisening on port: ${PORT}`))
