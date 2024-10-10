@@ -3,13 +3,13 @@ import { createServer } from "http"
 import WebSocket from "ws"
 import router from "./routes"
 
-const PORT = process.env.PORT || 8080
+const PORT = (process.env.PORT as unknown as number) || 8080
 
 const app = express()
-app.use("/", router)
-const server = createServer(app)
+// app.use("/", router)
+// const server = createServer(app)
 
-const wss = new WebSocket.Server({ server })
+const wss = new WebSocket.Server({ port: PORT })
 
 wss.on("error", console.error)
 
@@ -26,6 +26,14 @@ wss.on("connection", (ws) => {
       }
     })
   })
+
+  ws.on("close", () => {
+    console.log("Client disconnected")
+  })
 })
 
-server.listen(PORT, () => console.log(`Lisening on port: ${PORT}`))
+// Start the server
+const port = 3000
+app.listen(port, () => {
+  console.log(`Server started on http://localhost:${PORT}`)
+})
