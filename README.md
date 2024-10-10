@@ -28,5 +28,7 @@ Explain how to use your project. Provide examples and code snippets if necessary
 ## ToDo
 
 - [ ] Create React Vite frontend to connect to websocket server
-- [ ] Fix websocket server to handle multiple clients
-- [ ] Prevent websocket to close in frontend until tab close
+- [ ] Add db (SQLite or Postgres) with seed.
+- [ ] Modify crud to interact with db
+- [ ] Add a chart in the frontend using websocket data
+- [ ] Allow to modify data from the frontend. The chart must update
