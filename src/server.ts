@@ -1,20 +1,28 @@
 import express from "express"
 import WebSocket from "ws"
-import * as fs from "fs"
+import { generateRandomData } from "./utils/generateRandomData"
 
 const PORT = (process.env.PORT as unknown as number) || 8080
 
 const app = express()
 
-// const wss = new WebSocket.Server({ port: PORT })
+let randomData: Buffer | string = JSON.stringify(generateRandomData())
+
+setInterval(() => {
+  const newData = JSON.stringify(generateRandomData())
+  if (newData !== randomData) {
+    randomData = JSON.stringify(generateRandomData())
+  }
+}, 5000)
+
 const wss = new WebSocket.Server({ port: PORT })
 
 wss.on("error", console.error)
-
 wss.on("connection", (ws) => {
-  const graphData = fs.readFileSync("src/data/graphData.json", "utf8")
-
-  ws.send(graphData)
+  ws.send(randomData)
+})
+wss.on("close", () => {
+  console.log("Client disconnected")
 })
 
 // Chat
