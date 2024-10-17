@@ -3,11 +3,6 @@ import * as fs from "fs"
 
 const router = express.Router()
 
-// Create a new item
-router.post("/", (req: Request, res: Response) => {
-  // Your code to create a new item goes here
-})
-
 // Get all items
 router.get("/", (req: Request, res: Response) => {
   // Read the JSON file
@@ -31,16 +26,6 @@ router.get("/:id", (req: Request, res: Response) => {
 
   // Return the item
   res.json(item[0])
-})
-
-// Update an item by ID
-router.put("/:id", (req: Request, res: Response) => {
-  // Your code to update an item by ID goes here
-})
-
-// Delete an item by ID
-router.delete("/:id", (req: Request, res: Response) => {
-  // Your code to delete an item by ID goes here
 })
 
 export default router

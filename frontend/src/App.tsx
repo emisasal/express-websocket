@@ -1,9 +1,11 @@
-import Barchart from "./components/BarChart"
-import './App.css'
+import Chart from "./components/Chart"
+import "./App.css"
 
 function App() {
   return (
-    <Barchart />
+    <main>
+      <Chart />
+    </main>
   )
 }
 
