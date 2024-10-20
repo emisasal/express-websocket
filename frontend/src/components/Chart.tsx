@@ -9,22 +9,24 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts"
-import { useWebsocket } from "../hooks/useWebsocket"
+import { useWebsocketCustom } from "../hooks/useWebsocketCustom"
 import styles from "./chart.module.css"
 
 const Chart = () => {
-  const [isReady, websocketData] = useWebsocket("ws://localhost:8080")
+  const [isReady, websocketData] = useWebsocketCustom("ws://localhost:8080")
 
   const data = Array.isArray(websocketData) ? websocketData : []
 
   const containerProps = {
     width: "90%",
     heigth: "100%",
-    aspect: 2.5,
+    aspect: 3,
   }
 
   return (
     <div className={styles.container}>
+      <h2>Websocket Chart</h2>
+      <h3>ws://localhost:8080</h3>
       <div className={styles.status}>
         <p>Websocket status: {isReady ? "Connected" : "Disconnected"}</p>
       </div>
