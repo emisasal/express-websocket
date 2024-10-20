@@ -9,34 +9,32 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts"
-import { useWebsocket } from "../hooks/useWebsocket"
+import { useWebsocketCustom } from "../hooks/useWebsocketCustom"
 import styles from "./chart.module.css"
 
 const Chart = () => {
-  const [isReady, data] = useWebsocket("ws://localhost:8080")
+  const [isReady, websocketData] = useWebsocketCustom("ws://localhost:8080")
+
+  const data = Array.isArray(websocketData) ? websocketData : []
 
   const containerProps = {
-    width: "100%",
+    width: "90%",
     heigth: "100%",
-    aspect: 1.3,
+    aspect: 3,
   }
 
   return (
     <div className={styles.container}>
-      <div>
-        <h1>Real-Time Data Chart</h1>
-        <p>
-          This chart displays real-time data using WebSockets. The data is
-          generated on the server and sent to the client every 5 seconds.
-        </p>
-        <p>{isReady ? "Connected" : "Disconnected"}</p>
+      <h2>Websocket Chart</h2>
+      <h3>ws://localhost:8080</h3>
+      <div className={styles.status}>
+        <p>Websocket status: {isReady ? "Connected" : "Disconnected"}</p>
       </div>
-
       <ResponsiveContainer {...containerProps}>
         <BarChart
           width={500}
           height={250}
-          data={data as any}
+          data={data}
           margin={{
             top: 5,
             right: 30,

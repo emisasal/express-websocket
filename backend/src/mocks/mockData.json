@@ -1,0 +1,39 @@
+{
+  "items": [
+    {
+      "id": 1,
+      "name": "Widget A",
+      "category": "Electronics",
+      "price": 29.99,
+      "inStock": true
+    },
+    {
+      "id": 2,
+      "name": "Gadget B",
+      "category": "Electronics",
+      "price": 49.99,
+      "inStock": false
+    },
+    {
+      "id": 3,
+      "name": "Tool C",
+      "category": "Hardware",
+      "price": 19.99,
+      "inStock": true
+    },
+    {
+      "id": 4,
+      "name": "Appliance D",
+      "category": "Home",
+      "price": 199.99,
+      "inStock": true
+    },
+    {
+      "id": 5,
+      "name": "Book E",
+      "category": "Literature",
+      "price": 9.99,
+      "inStock": true
+    }
+  ]
+}

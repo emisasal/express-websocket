@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 
-export const useWebsocket = (url: string) => {
+export const useWebsocketCustom = (url: string) => {
   const [isReady, setIsReady] = useState(false)
   const [data, setData] = useState()
 
@@ -18,7 +18,7 @@ export const useWebsocket = (url: string) => {
     ws.current = socket
 
     return () => socket.close()
-  }, [data])
+  }, [data, url])
 
   return [isReady, data, (ws.current as WebSocket)?.send.bind(ws.current)]
 }
@@ -26,3 +26,5 @@ export const useWebsocket = (url: string) => {
 // "isReady" is a boolean that indicates whether the connection is ready
 // "data" is the data received from the server
 // "send" is a function that sends data to the server
+
+//  ToDo: Reconnect to the websocket when the connection is lost
