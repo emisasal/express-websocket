@@ -20,20 +20,14 @@ const Chart = () => {
   const containerProps = {
     width: "90%",
     heigth: "100%",
-    aspect: 2,
+    aspect: 2.5,
   }
 
   return (
     <div className={styles.container}>
-      <header>
-        <h1>Real-Time Data Chart</h1>
-        <p>
-          This chart displays real-time data using WebSockets. The data is
-          generated on the server and sent to the client every 5 seconds.
-        </p>
+      <div className={styles.status}>
         <p>Websocket status: {isReady ? "Connected" : "Disconnected"}</p>
-      </header>
-
+      </div>
       <ResponsiveContainer {...containerProps}>
         <BarChart
           width={500}
