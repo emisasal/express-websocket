@@ -12,8 +12,8 @@ import {
 import { useWebsocketCustom } from "../hooks/useWebsocketCustom"
 import styles from "./chart.module.css"
 
-const Chart = () => {
-  const [isReady, websocketData] = useWebsocketCustom("ws://localhost:8080")
+const ChartWSCustom = () => {
+  const [websocketData, status] = useWebsocketCustom("ws://localhost:8080")
 
   const data = Array.isArray(websocketData) ? websocketData : []
 
@@ -25,10 +25,10 @@ const Chart = () => {
 
   return (
     <div className={styles.container}>
-      <h2>Websocket Chart</h2>
+      <h2>Custom Hook Websocket Chart</h2>
       <h3>ws://localhost:8080</h3>
       <div className={styles.status}>
-        <p>Websocket status: {isReady ? "Connected" : "Disconnected"}</p>
+        <p>Websocket status: {status as string}</p>
       </div>
       <ResponsiveContainer {...containerProps}>
         <BarChart
@@ -63,4 +63,4 @@ const Chart = () => {
   )
 }
 
-export default Chart
+export default ChartWSCustom

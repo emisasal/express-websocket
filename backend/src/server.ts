@@ -5,7 +5,7 @@ import { Server as WebSocketServer } from "ws"
 import routes from "./routes"
 import { generateRandomData } from "./utils/generateRandomData"
 
-const PORT = (process.env.PORT as unknown as number) || 8080
+const PORT = 8080
 
 const app = express()
 
@@ -16,7 +16,7 @@ app.use("/api", routes)
 
 // Start the http server
 const server = app.listen(PORT, () => {
-  console.log(`http/ws server listening on ${PORT}`)
+  console.log(`HTTP/WS server listening on ${PORT}`)
 })
 
 // Generate random data
