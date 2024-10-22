@@ -1,6 +1,6 @@
 import { lazy, Suspense } from "react"
-// import ChartWSCustom from "./components/ChartWSCustom"
-import ChartUseWebsocket from "./components/ChartUseWebsocket"
+import ChartWSCustom from "./components/ChartWSCustom"
+// import ChartUseWebsocket from "./components/ChartUseWebsocket"
 import "./App.css"
 
 const Items = lazy(() => import("./components/Items"))
@@ -18,8 +18,8 @@ function App() {
         <br />
       </header>
       <hr />
-      {/* <ChartWSCustom /> */}
-      <ChartUseWebsocket />
+      <ChartWSCustom />
+      {/* <ChartUseWebsocket /> */}
       <hr />
       <Suspense fallback={<div className="loading">Loading...</div>}>
         <Items />

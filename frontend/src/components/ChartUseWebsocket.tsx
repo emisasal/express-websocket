@@ -20,22 +20,33 @@ interface ChartData {
 }
 
 const ChartUseWebsocket = () => {
-  const WS_URL = "ws://localhost:8080"
   const [data, setData] = useState<ChartData[]>([])
+  const WS_URL = "ws://localhost:8080"
 
-  const { lastJsonMessage, readyState } = useWebSocket(
-    WS_URL,
-    {
-      shouldReconnect: () => true,
-    }
-  )
+  const { lastJsonMessage, readyState } = useWebSocket(WS_URL, {
+    share: false, // share the connection with other components
+    // filter: () => true, // filter messages
+    retryOnError: true, // retry on connection error
+    shouldReconnect: () => true, // reconnect on close
+  })
 
   useEffect(() => {
-    console.log("lastJsonMessage", lastJsonMessage)
-    if (lastJsonMessage !== null) {
-      setData(prev => prev = lastJsonMessage as ChartData[])
+    if (lastJsonMessage !== null && readyState === ReadyState.OPEN) {
+      console.log("lastJsonMessage", lastJsonMessage)
+    setData(prev => prev = lastJsonMessage as ChartData[])
     }
-  }, [lastJsonMessage])
+    //   // if (readyState === ReadyState.OPEN && lastJsonMessage !== null) {
+    //     //   return setData(lastJsonMessage as ChartData[])
+    //     // }
+  }, [lastJsonMessage, readyState])
+
+  const connectionStatus = {
+    [ReadyState.CONNECTING]: "Connecting",
+    [ReadyState.OPEN]: "Open",
+    [ReadyState.CLOSING]: "Closing",
+    [ReadyState.CLOSED]: "Closed",
+    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
+  }[readyState]
 
   const containerProps = {
     width: "90%",
@@ -43,16 +54,13 @@ const ChartUseWebsocket = () => {
     aspect: 3,
   }
 
-  //   Not updating the chart
-
   return (
     <div className={styles.container}>
       <h2>React Use Websocket Chart</h2>
       <h3>ws://localhost:8080</h3>
       <div className={styles.status}>
         <p>
-          Websocket status:{" "}
-          {readyState === ReadyState.OPEN ? "Connected" : "Disconnected"}
+          Websocket status: {connectionStatus}
         </p>
       </div>
       <ResponsiveContainer {...containerProps}>
