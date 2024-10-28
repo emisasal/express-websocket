@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 
 export const useWebsocketCustom = (url: string) => {
   const [data, setData] = useState()
@@ -9,12 +9,15 @@ export const useWebsocketCustom = (url: string) => {
   useEffect(() => {
     const socket = new WebSocket(url)
 
-    socket.onerror = () => setStatus("ERROR")
     socket.onopen = () => setStatus("CONNECTED")
     socket.onmessage = (event) => {
       setData(JSON.parse(event.data))
     }
     socket.onclose = () => setStatus("DISCONNECTED")
+    socket.onerror = () => {
+      setStatus("ERROR")
+      socket.close()
+    }
 
     ws.current = socket
 
@@ -23,7 +26,13 @@ export const useWebsocketCustom = (url: string) => {
     }
   }, [data, url])
 
-  return [data, status, (ws.current as WebSocket)?.send.bind(ws.current)]
+  const send = useCallback(() => {
+    if (ws.current?.readyState === WebSocket.OPEN && data !== undefined) {
+      ws.current.send(data)
+    }
+  }, [ws.current, data])
+
+  return [data, status, send]
 }
 
 // The useWebsocket hook takes a URL and returns an array with three elements:
