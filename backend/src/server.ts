@@ -34,10 +34,12 @@ setInterval(() => {
 const wss = new WebSocketServer({ server })
 
 // Handle errors
-wss.on("error", console.error)
+wss.on("error", (err) => console.error(err))
 
 // Handle new connections
 wss.on("connection", (ws) => {
+  ws.on("error", (err) => console.error(err))
+
   ws.send(randomData)
 
   ws.on("message", (message) => {
