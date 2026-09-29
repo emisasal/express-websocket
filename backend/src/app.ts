@@ -7,6 +7,7 @@ import { WebSocket, WebSocketServer } from "ws"
 import { serializeMetricsPayload } from "@express-websocket/shared"
 import routes from "./routes"
 import { generateRandomData } from "./utils/generateRandomData"
+import { log } from "./log"
 
 const isProd = process.env.NODE_ENV === "production"
 
@@ -20,7 +21,7 @@ export function createApp() {
 
   app.use(cors())
   if (process.env.NODE_ENV !== "test") {
-    app.use(morgan("dev"))
+    app.use(morgan(isProd ? "combined" : "dev"))
   }
   app.use(express.json())
   app.use("/api", routes)
@@ -60,15 +61,25 @@ export function startHttpServer(options?: {
   const server = http.createServer(app)
   let randomData = serializeMetricsPayload(generateRandomData())
   const wss = new WebSocketServer({ server, path: "/ws" })
+  let nextClientId = 1
 
-  wss.on("error", (err) => console.error(err))
+  wss.on("error", (err) => {
+    log.error("WebSocket server error", { message: err.message })
+  })
 
   function broadcast(payload: string) {
+    let sent = 0
     for (const client of wss.clients) {
       if (client.readyState === WebSocket.OPEN) {
         client.send(payload)
+        sent += 1
       }
     }
+    log.debug("Broadcast metrics", {
+      clients: sent,
+      intervalMs: metricsIntervalMs,
+      bytes: Buffer.byteLength(payload),
+    })
   }
 
   const interval = setInterval(() => {
@@ -76,13 +87,35 @@ export function startHttpServer(options?: {
     broadcast(randomData)
   }, metricsIntervalMs)
 
-  wss.on("connection", (socket) => {
-    socket.on("error", (err) => console.error(err))
+  wss.on("connection", (socket, request) => {
+    const id = nextClientId
+    nextClientId += 1
+    log.info("WebSocket connected", {
+      id,
+      clients: wss.clients.size,
+      ip: request.socket.remoteAddress,
+    })
+
+    socket.on("error", (err) => {
+      log.error("WebSocket client error", { id, message: err.message })
+    })
+
+    socket.on("close", (code) => {
+      log.info("WebSocket disconnected", {
+        id,
+        code,
+        clients: wss.clients.size,
+      })
+    })
+
     socket.send(randomData)
   })
 
   return new Promise((resolve, reject) => {
-    server.once("error", reject)
+    server.once("error", (err) => {
+      log.error("HTTP server failed to bind", { message: err.message, port })
+      reject(err)
+    })
     server.listen(port, () => {
       const address = server.address()
       if (!address || typeof address === "string") {
@@ -90,11 +123,24 @@ export function startHttpServer(options?: {
         return
       }
 
+      const boundPort = address.port
+      log.info("Server listening", {
+        port: boundPort,
+        env: process.env.NODE_ENV ?? "development",
+        http: `http://127.0.0.1:${boundPort}`,
+        ws: `ws://127.0.0.1:${boundPort}/ws`,
+        metricsIntervalMs,
+      })
+      if (isProd) {
+        log.info("Serving frontend", { dir: frontendDist })
+      }
+
       resolve({
-        port: address.port,
+        port: boundPort,
         server,
         close: () =>
           new Promise((closeResolve, closeReject) => {
+            log.info("Server shutting down", { port: boundPort })
             clearInterval(interval)
             wss.close()
             server.close((err) => {
