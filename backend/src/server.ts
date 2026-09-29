@@ -1,7 +1,7 @@
 import express from "express"
 import cors from "cors"
 import morgan from "morgan"
-import { Server as WebSocketServer } from "ws"
+import { WebSocket, Server as WebSocketServer } from "ws"
 import routes from "./routes"
 import { generateRandomData } from "./utils/generateRandomData"
 
@@ -19,36 +19,26 @@ const server = app.listen(PORT, () => {
   console.log(`HTTP/WS server listening on ${PORT}`)
 })
 
-// Generate random data
-let randomData: Buffer | string = JSON.stringify(generateRandomData())
+let randomData = JSON.stringify(generateRandomData())
 
-// Update random data every 5 seconds
-setInterval(() => {
-  const newData = JSON.stringify(generateRandomData())
-  if (newData !== randomData) {
-    randomData = JSON.stringify(generateRandomData())
-  }
-}, 5000)
-
-// Start the websocket server with the http server
 const wss = new WebSocketServer({ server })
 
-// Handle errors
 wss.on("error", (err) => console.error(err))
 
-// Handle new connections
-wss.on("connection", (ws) => {
-  ws.on("error", (err) => console.error(err))
+function broadcast(payload: string) {
+  for (const client of wss.clients) {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(payload)
+    }
+  }
+}
 
-  ws.send(randomData)
+setInterval(() => {
+  randomData = JSON.stringify(generateRandomData())
+  broadcast(randomData)
+}, 5000)
 
-  ws.on("message", (message) => {
-    console.log(`Received: ${message}`)
-    //  Handle message data
-  })
-})
-
-// Handle disconnections
-wss.on("close", () => {
-  console.log("Client disconnected")
+wss.on("connection", (socket) => {
+  socket.on("error", (err) => console.error(err))
+  socket.send(randomData)
 })

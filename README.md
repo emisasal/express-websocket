@@ -42,6 +42,6 @@ To set up the project, follow these steps:
 
 **Frontend:**
 
-- React (Vite)
-- Recharts (Chart)
+- React (Vite) with Tailwind CSS
+- Chart.js (real-time canvas chart)
 - Axios
