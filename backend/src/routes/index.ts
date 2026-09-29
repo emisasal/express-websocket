@@ -1,25 +1,26 @@
 import express, { Request, Response } from "express"
-import * as fs from "fs"
+import { catalog } from "../catalog"
 
 const router = express.Router()
 
-// Get all items
-router.get("/", (req: Request, res: Response) => {
-  const data = fs.readFileSync("src/mocks/mockData.json", "utf8")
-  const items = JSON.parse(data)
-
-  res.status(200).send(items)
+router.get("/", (_req: Request, res: Response) => {
+  res.status(200).json(catalog)
 })
 
-// Get a single item by ID
 router.get("/:id", (req: Request, res: Response) => {
-  const itemId = req.params.id
-  const data = fs.readFileSync("src/mocks/mockData.json", "utf8")
-  const items = JSON.parse(data)
+  const id = Number(req.params.id)
+  if (!Number.isInteger(id)) {
+    res.status(400).json({ error: "Invalid item id" })
+    return
+  }
 
-  const item = items.items.filter((item: any) => item.id === Number(itemId))
+  const item = catalog.items.find((entry) => entry.id === id)
+  if (!item) {
+    res.status(404).json({ error: "Item not found" })
+    return
+  }
 
-  res.status(200).send(item[0])
+  res.status(200).json(item)
 })
 
 export default router

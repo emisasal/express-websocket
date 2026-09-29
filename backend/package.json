@@ -7,10 +7,10 @@
   },
   "main": "server.ts",
   "scripts": {
-    "dev": "node --watch --watch-preserve-output -r ts-node/register src/server.ts",
+    "dev": "node --watch --watch-preserve-output --env-file-if-exists=../.env -r ts-node/register src/server.ts",
     "build": "tsc",
     "format": "prettier --write .",
-    "start": "node dist/server.js"
+    "start": "NODE_ENV=production node dist/server.js"
   },
   "keywords": [],
   "author": "Emiliano Sasal",

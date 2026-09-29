@@ -10,6 +10,8 @@
     "dev": "pnpm --parallel --filter ./backend --filter ./frontend dev",
     "dev:backend": "pnpm --filter ./backend dev",
     "dev:frontend": "pnpm --filter ./frontend dev",
+    "build": "pnpm build:frontend && pnpm build:backend",
+    "start": "pnpm --filter ./backend start",
     "build:backend": "pnpm --filter ./backend build",
     "build:frontend": "pnpm --filter ./frontend build",
     "format": "prettier --write .",

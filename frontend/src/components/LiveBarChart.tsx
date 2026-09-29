@@ -10,11 +10,10 @@ import {
 } from "chart.js"
 import { Bar } from "react-chartjs-2"
 import { useLiveSocket, type ChartPoint } from "../hooks/useLiveSocket"
+import { getWsUrl } from "../config"
 import { StatusBadge } from "./StatusBadge"
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
-
-const WS_URL = "ws://localhost:8080"
 
 const reduceMotion =
   typeof window !== "undefined" &&
@@ -76,7 +75,7 @@ function toChartData(points: ChartPoint[]) {
 }
 
 export function LiveBarChart() {
-  const { data, status } = useLiveSocket(WS_URL)
+  const { data, status } = useLiveSocket(getWsUrl())
   const chartData = useMemo(() => toChartData(data), [data])
 
   return (
@@ -92,7 +91,7 @@ export function LiveBarChart() {
           <p className="mt-1 text-sm text-zinc-400">
             Canvas chart via Chart.js. Values refresh from{" "}
             <code translate="no" className="text-zinc-300">
-              ws://localhost:8080
+              /ws
             </code>{" "}
             every 5 seconds.
           </p>

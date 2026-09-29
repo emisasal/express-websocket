@@ -1,5 +1,6 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
+import { getApiUrl } from "../config"
 
 type Item = {
   id: number
@@ -27,10 +28,9 @@ export function Items() {
 
     const fetchItems = async () => {
       try {
-        const response = await axios.get<{ items: Item[] }>(
-          "http://localhost:8080/api",
-          { signal: controller.signal },
-        )
+        const response = await axios.get<{ items: Item[] }>(getApiUrl("/api"), {
+          signal: controller.signal,
+        })
         const items = response.data?.items ?? []
         setState({ status: "ready", items })
       } catch (error) {
@@ -58,7 +58,7 @@ export function Items() {
       <p className="mt-1 text-sm text-zinc-400">
         Snapshot from{" "}
         <code translate="no" className="text-zinc-300">
-          http://localhost:8080/api
+          /api
         </code>
       </p>
 
