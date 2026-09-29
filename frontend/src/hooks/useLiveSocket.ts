@@ -1,12 +1,9 @@
 import { useEffect, useRef, useState } from "react"
+import { parseMetricsPayload, type ChartPoint } from "@express-websocket/shared"
 
 export type ConnectionStatus = "connecting" | "open" | "closed" | "error"
 
-export type ChartPoint = {
-  name: string
-  pv: number
-  uv: number
-}
+export type { ChartPoint }
 
 export function useLiveSocket(url: string) {
   const [data, setData] = useState<ChartPoint[]>([])
@@ -35,9 +32,9 @@ export function useLiveSocket(url: string) {
 
       socket.onmessage = (event) => {
         try {
-          const parsed: unknown = JSON.parse(event.data)
-          if (!Array.isArray(parsed)) return
-          setData(parsed as ChartPoint[])
+          const parsed: unknown = JSON.parse(String(event.data))
+          const metrics = parseMetricsPayload(parsed)
+          if (metrics) setData(metrics)
         } catch {
           // Ignore malformed frames so one bad payload does not drop the stream.
         }

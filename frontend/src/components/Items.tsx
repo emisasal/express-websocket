@@ -1,14 +1,6 @@
-import axios from "axios"
 import { useEffect, useState } from "react"
-import { getApiUrl } from "../config"
-
-type Item = {
-  id: number
-  name: string
-  category: string
-  price: number
-  inStock: boolean
-}
+import type { Item } from "@express-websocket/shared"
+import { fetchCatalog } from "../api"
 
 type ItemsState =
   | { status: "loading" }
@@ -28,13 +20,18 @@ export function Items() {
 
     const fetchItems = async () => {
       try {
-        const response = await axios.get<{ items: Item[] }>(getApiUrl("/api"), {
-          signal: controller.signal,
-        })
-        const items = response.data?.items ?? []
+        const items = await fetchCatalog(controller.signal)
         setState({ status: "ready", items })
       } catch (error) {
-        if (axios.isCancel(error) || controller.signal.aborted) return
+        if (controller.signal.aborted) return
+        if (
+          typeof error === "object" &&
+          error !== null &&
+          "code" in error &&
+          error.code === "ERR_CANCELED"
+        ) {
+          return
+        }
         setState({
           status: "error",
           message:

@@ -9,7 +9,8 @@ import {
   type ChartOptions,
 } from "chart.js"
 import { Bar } from "react-chartjs-2"
-import { useLiveSocket, type ChartPoint } from "../hooks/useLiveSocket"
+import { useLiveSocket } from "../hooks/useLiveSocket"
+import type { ChartPoint } from "@express-websocket/shared"
 import { getWsUrl } from "../config"
 import { StatusBadge } from "./StatusBadge"
 

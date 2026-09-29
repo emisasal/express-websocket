@@ -30,7 +30,8 @@ To set up the project, follow these steps:
 5. Optionally copy `.env.example` to `.env` and set `PORT` (defaults to 8080)
 6. Start backend and frontend from the project root: `pnpm dev`
    - UI: http://localhost:5173 (Vite proxies `/api` and `/ws` to Express)
-   - API / WebSocket origin in production: `pnpm build` then `pnpm start` (Express serves the UI on `PORT`)
+   - Production: `pnpm build` then `pnpm start` (Express serves the UI on `PORT`)
+7. Run tests: `pnpm test`
 
 ## Technologies
 
