@@ -31,7 +31,7 @@ To set up the project, follow these steps:
 6. Start backend and frontend from the project root: `pnpm dev`
    - UI: http://localhost:5173 (Vite proxies `/api` and `/ws` to Express)
    - Production: `pnpm build` then `pnpm start` (Express serves the UI on `PORT`)
-7. Run tests: `pnpm test`
+7. Run checks: `pnpm lint`, `pnpm test`, and `pnpm format:check`
 
 ## Technologies
 
