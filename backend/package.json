@@ -1,5 +1,5 @@
 {
-  "name": "express-websocket",
+  "name": "backend",
   "version": "1.0.0",
   "description": "Express API with Websocket using ws",
   "engines": {
@@ -8,7 +8,7 @@
   "main": "server.ts",
   "scripts": {
     "dev": "node --watch --watch-preserve-output -r ts-node/register src/server.ts",
-    "build": "npx tsc",
+    "build": "tsc",
     "start": "node dist/server.js"
   },
   "keywords": [],

@@ -25,9 +25,10 @@ To set up the project, follow these steps:
 
 1. Clone the repository: `git clone https://github.com/emisasal/express-websocket.git`
 2. Navigate to the project directory: `cd express-websocket`
-3. Install dependencies in `/backend` and `/frontend` with `npm install`
-4. Create a `.env` file and set up the backend port
-5. Start the server with `npm run dev` in `/backend`, and the frontend with `npm run dev` in `/frontend`
+3. Enable Corepack (ships with Node.js) so the repo’s pinned pnpm version is used: `corepack enable pnpm`
+4. Install dependencies from the project root: `pnpm install`
+5. Create a `.env` file and set up the backend port
+6. Start backend and frontend together from the project root: `pnpm dev` (or run them separately with `pnpm dev:backend` and `pnpm dev:frontend`)
 
 ## Technologies
 
