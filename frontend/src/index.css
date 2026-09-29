@@ -1,17 +1,17 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+@import "tailwindcss";
+
+html {
+  color-scheme: dark;
 }
 
 body {
-  height: 100vh;
-  width: 100vw;
-  background-color: #121212;
-  color: #fff;
-  font-family: "Inter", sans-serif;
+  @apply min-h-dvh bg-zinc-950 font-sans text-zinc-100 antialiased;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left);
+  touch-action: manipulation;
 }
 
-ol {
-  color: inherit;
+@theme {
+  --font-sans:
+    ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
 }

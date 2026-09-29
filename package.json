@@ -1,0 +1,26 @@
+{
+  "name": "express-websocket",
+  "private": true,
+  "packageManager": "pnpm@12.6.0",
+  "engines": {
+    "node": ">=20.6.0",
+    "pnpm": ">=12.6.0"
+  },
+  "scripts": {
+    "dev": "pnpm --parallel --filter ./backend --filter ./frontend dev",
+    "dev:backend": "pnpm --filter ./backend dev",
+    "dev:frontend": "pnpm --filter ./frontend dev",
+    "build": "pnpm --filter ./frontend build && pnpm --filter ./backend build",
+    "test": "pnpm --filter @express-websocket/shared test && pnpm --filter ./backend test && pnpm --filter ./frontend test",
+    "lint": "pnpm --filter ./frontend lint",
+    "start": "pnpm --filter ./backend start",
+    "build:backend": "pnpm --filter ./backend build",
+    "build:frontend": "pnpm --filter ./frontend build",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "prettier": "^3.9.9",
+    "prettier-plugin-tailwindcss": "^0.8.1"
+  }
+}
