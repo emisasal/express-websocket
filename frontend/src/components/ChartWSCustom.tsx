@@ -18,8 +18,8 @@ const ChartWSCustom = () => {
   const data = Array.isArray(websocketData) ? websocketData : []
 
   const containerProps = {
-    width: "90%",
-    heigth: "100%",
+    width: "90%" as const,
+    height: "100%" as const,
     aspect: 3,
   }
 

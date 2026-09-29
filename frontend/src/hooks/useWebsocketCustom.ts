@@ -30,7 +30,7 @@ export const useWebsocketCustom = (url: string) => {
     if (ws.current?.readyState === WebSocket.OPEN && data !== undefined) {
       ws.current.send(data)
     }
-  }, [ws.current, data])
+  }, [data])
 
   return [data, status, send]
 }

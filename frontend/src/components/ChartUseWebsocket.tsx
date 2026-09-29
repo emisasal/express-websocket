@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react"
 import {
   BarChart,
   Bar,
@@ -20,7 +19,6 @@ interface ChartData {
 }
 
 const ChartUseWebsocket = () => {
-  const [data, setData] = useState<ChartData[]>([])
   const WS_URL = "ws://localhost:8080"
 
   const { lastJsonMessage, readyState } = useWebSocket(WS_URL, {
@@ -30,15 +28,9 @@ const ChartUseWebsocket = () => {
     shouldReconnect: () => true, // reconnect on close
   })
 
-  useEffect(() => {
-    if (lastJsonMessage !== null && readyState === ReadyState.OPEN) {
-      console.log("lastJsonMessage", lastJsonMessage)
-    setData(prev => prev = lastJsonMessage as ChartData[])
-    }
-    //   // if (readyState === ReadyState.OPEN && lastJsonMessage !== null) {
-    //     //   return setData(lastJsonMessage as ChartData[])
-    //     // }
-  }, [lastJsonMessage, readyState])
+  const data = Array.isArray(lastJsonMessage)
+    ? (lastJsonMessage as ChartData[])
+    : []
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: "Connecting",
@@ -49,8 +41,8 @@ const ChartUseWebsocket = () => {
   }[readyState]
 
   const containerProps = {
-    width: "90%",
-    height: "100%",
+    width: "90%" as const,
+    height: "100%" as const,
     aspect: 3,
   }
 
@@ -59,9 +51,7 @@ const ChartUseWebsocket = () => {
       <h2>React Use Websocket Chart</h2>
       <h3>ws://localhost:8080</h3>
       <div className={styles.status}>
-        <p>
-          Websocket status: {connectionStatus}
-        </p>
+        <p>Websocket status: {connectionStatus}</p>
       </div>
       <ResponsiveContainer {...containerProps}>
         <BarChart

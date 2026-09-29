@@ -28,7 +28,9 @@ const Items = () => {
 
       <ul>
         {items?.map((item: Item) => (
-          <li key={item.id}>{`id: ${item.id} - name: ${item.name} - category: ${item.category} - price: ${item.price} - inStock: ${item.inStock}`}</li>
+          <li
+            key={item.id}
+          >{`id: ${item.id} - name: ${item.name} - category: ${item.category} - price: ${item.price} - inStock: ${item.inStock}`}</li>
         ))}
       </ul>
     </div>

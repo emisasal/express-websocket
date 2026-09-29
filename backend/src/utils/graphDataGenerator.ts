@@ -52,75 +52,74 @@ type TooltipGroupingMode = (typeof options)["tooltipGroupingMode"][number]
 const optionKeys = Object.keys(options) as (keyof typeof options)[]
 
 export function makeDataFrom(
-    dataType: DataType,
-    series: number,
-    datums: number,
-    useR?: boolean
-  ) {
-    return [
-      ...new Array(series || Math.max(Math.round(Math.random() * 5), 1)),
-    ].map((d, i) => makeSeries(i, dataType, datums, useR));
-  }
-
+  dataType: DataType,
+  series: number,
+  datums: number,
+  useR?: boolean,
+) {
+  return [
+    ...new Array(series || Math.max(Math.round(Math.random() * 5), 1)),
+  ].map((d, i) => makeSeries(i, dataType, datums, useR))
+}
 
 function makeSeries(
-    i: number,
-    dataType: DataType,
-    datums: number,
-    useR?: boolean
-  ) {
-    const start = 0;
-    const startDate = new Date();
-    // startDate.setFullYear(2020);
-    startDate.setUTCHours(0);
-    startDate.setUTCMinutes(0);
-    startDate.setUTCSeconds(0);
-    startDate.setUTCMilliseconds(0);
-    // const length = 5 + Math.round(Math.random() * 15)
-    const length = datums;
-    const min = 0;
-    const max = 100;
-    const rMin = 2;
-    const rMax = 20;
-    const nullChance = 0;
-    return {
-      label: `Series ${i + 1}`,
-      data: [...new Array(length)].map((_, i) => {
-        let x;
-  
-        if (dataType === "ordinal") {
-          x = `Ordinal Group ${start + i}`;
-        } else if (dataType === "time") {
-          x = new Date(startDate.getTime() + 60 * 1000 * 60 * 24 * i);
-        } else if (dataType === "linear") {
-          x =
-            Math.random() < nullChance
-              ? null
-              : min + Math.round(Math.random() * (max - min));
-        } else {
-          x = start + i;
-        }
-  
-        const distribution = 1.1;
-  
-        const y =
+  i: number,
+  dataType: DataType,
+  datums: number,
+  useR?: boolean,
+) {
+  const start = 0
+  const startDate = new Date()
+  // startDate.setFullYear(2020);
+  startDate.setUTCHours(0)
+  startDate.setUTCMinutes(0)
+  startDate.setUTCSeconds(0)
+  startDate.setUTCMilliseconds(0)
+  // const length = 5 + Math.round(Math.random() * 15)
+  const length = datums
+  const min = 0
+  const max = 100
+  const rMin = 2
+  const rMax = 20
+  const nullChance = 0
+  return {
+    label: `Series ${i + 1}`,
+    data: [...new Array(length)].map((_, i) => {
+      let x
+
+      if (dataType === "ordinal") {
+        x = `Ordinal Group ${start + i}`
+      } else if (dataType === "time") {
+        x = new Date(startDate.getTime() + 60 * 1000 * 60 * 24 * i)
+      } else if (dataType === "linear") {
+        x =
           Math.random() < nullChance
             ? null
-            : min + Math.round(Math.random() * (max - min));
-  
-        const r = !useR
-          ? undefined
-          : rMax -
-            Math.floor(
-              Math.log(Math.random() * (distribution ** rMax - rMin) + rMin) /
-                Math.log(distribution)
-            );
-  
-        return {
-          primary: x,
-          secondary: y,
-          radius: r,
-        };
-      }),
-    };
+            : min + Math.round(Math.random() * (max - min))
+      } else {
+        x = start + i
+      }
+
+      const distribution = 1.1
+
+      const y =
+        Math.random() < nullChance
+          ? null
+          : min + Math.round(Math.random() * (max - min))
+
+      const r = !useR
+        ? undefined
+        : rMax -
+          Math.floor(
+            Math.log(Math.random() * (distribution ** rMax - rMin) + rMin) /
+              Math.log(distribution),
+          )
+
+      return {
+        primary: x,
+        secondary: y,
+        radius: r,
+      }
+    }),
   }
+}
